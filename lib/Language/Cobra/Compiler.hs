@@ -61,7 +61,7 @@ funInstrs n instrs = funEntry n ++ instrs ++ funExit
 funEntry :: Int -> [Instruction]
 funEntry n  = [ IPush (Reg EBP)
 			  , IMov (Reg EBP) (Reg ESP)
-			  , ISub (reg ESP) (Const (4 * n))
+			  , ISub (Reg ESP) (Const (4 * n))
 			  ]
 
 -- | TBD: cleaning up stack-frame after function finishes
@@ -134,16 +134,16 @@ compilePrim1 l env Add1 v = assertType env v TNumber
 compilePrim1 l env Sub1 v = assertType env v TNumber
 	     					++ [ IMov (Reg EAX) (immArg env v), IAdd (Reg EAX) (Const (-2)) 
 	     					, IJo (DynamicErr ArithOverflow)]
-compilePrim1 l env Print v = [ IPush (Reg EAX), ICall (Builtin "print"), IPop (Reg EAX) ]
+compilePrim1 l env Print v = [ IMov (Reg EAX) (immArg env v), IPush (Reg EAX), ICall (Builtin "print"), IPop (Reg EAX) ]
 compilePrim1 l env IsNum v =  let (_, i) = l in
-							 [ IAnd v (Const 1), ICmp v (Const 0), IJne (BranchTrue i)
-							 , IMov (Reg EAX) (Const -1), IJmp (BranchDone i) ILabel (BranchTrue i)
-							 , IMov (Reg EAX) (Const -1), ILabel (BranchDone i)
+							 [ IMov (Reg EAX) (immArg env v), IAnd (Reg EAX) (Const 1), ICmp (Reg EAX) (Const 0), IJne (BranchTrue i)
+							 , IMov (Reg EAX) (Const (-1)), IJmp (BranchDone i), ILabel (BranchTrue i)
+							 , IMov (Reg EAX) (Const 0x7fffffff), ILabel (BranchDone i)
 							 ] --FIND OUT WHAT FALSE IS
 compilePrim1 l env IsBool v = let (_, i) = l in
-							  [ IAnd v (Const 1), ICmp v (Const 0), IJne (BranchTrue i)
-							  , IMov (Reg EAX) (Const -1), IJmp (BranchDone i), ILabel (BranchTrue i)
-							  , IMov (Reg EAX) (Const -1), ILabel (BranchDone i)
+							  [ IMov (Reg EAX) (immArg env v), IAnd (Reg EAX) (Const 1), ICmp (Reg EAX) (Const 0), IJne (BranchTrue i)
+							  , IMov (Reg EAX) (Const 0x7fffffff), IJmp (BranchDone i), ILabel (BranchTrue i)
+							  , IMov (Reg EAX) (Const (-1)), ILabel (BranchDone i)
 							  ] --FIND OUT WHAT FALSE IS
     								--add1 sub1 print isnum isbool Separate case for each?
 -- | TBD: Implement code for `Prim2` with appropriate type checking
@@ -178,17 +178,17 @@ compilePrim2 l env Greater v1 v2 = assertType env v1 TNumber
 compilePrim2 l env Equal v1 v2 = let (_, i) = l in
 								 assertType env v1 TNumber
 								 ++ assertType env v2 TNumber
-								 ++ [ ICmp (immArg v1) (immArg v2), IJe (BranchTrue i) 
-								 , IMov (Reg EAX) (Const false), IJmp (BranchDone i), ILabel (BranchTrue i)
-								 , IMov (Reg EAX) (Const TRUE), ILabel (BranchDone i)
+								 ++ [ ICmp (immArg env v1) (immArg env v2), IJe (BranchTrue i) 
+								 , IMov (Reg EAX) (Const 0x7fffffff), IJmp (BranchDone i), ILabel (BranchTrue i)
+								 , IMov (Reg EAX) (Const (-1)), ILabel (BranchDone i)
 								 ]
 
 -- | TBD: Implement code for `If` with appropriate type checking
 compileIf :: Tag -> Env -> IExp -> AExp -> AExp -> [Instruction]
-compileIf l env v e1 e2 = 
-						  (compileEnv env v ++ [ICmp (Reg EAX) (Const 0), IJne (BranchTrue l)] 
-						  ++ compileEnv env e2 ++ [IJmp (BranchDone l), ILabel (BranchTrue l)] 
-						  ++ compileEnv env e1 ++ [ILabel (BranchDone l)])
+compileIf l env v e1 e2 = let (_, i) = l in
+						  (compileEnv env v ++ [ICmp (Reg EAX) (Const 0), IJne (BranchTrue i)] 
+						  ++ compileEnv env e2 ++ [IJmp (BranchDone i), ILabel (BranchTrue i)] 
+						  ++ compileEnv env e1 ++ [ILabel (BranchDone i)])
 
 immArg :: Env -> IExp -> Arg
 immArg _   (Number n _)  = repr n
