@@ -186,7 +186,7 @@ compilePrim2 l env Equal v1 v2 = let (_, i) = l in
 -- | TBD: Implement code for `If` with appropriate type checking
 compileIf :: Tag -> Env -> IExp -> AExp -> AExp -> [Instruction]
 compileIf l env v e1 e2 = 
-						  ++ (compileEnv env v ++ [ICmp (Reg EAX) (Const 0), IJne (BranchTrue l)] 
+						  (compileEnv env v ++ [ICmp (Reg EAX) (Const 0), IJne (BranchTrue l)] 
 						  ++ compileEnv env e2 ++ [IJmp (BranchDone l), ILabel (BranchTrue l)] 
 						  ++ compileEnv env e1 ++ [ILabel (BranchDone l)])
 
