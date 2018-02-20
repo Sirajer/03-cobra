@@ -1,7 +1,7 @@
 [
     {
-	"name" : "twoaddmul",
-	"code" : "(3 + 4) * 2",
+	"name" : "twoadd",
+	"code" : "2 + 2",
 	"result" : { "value": "14" }
 	},
 	{
