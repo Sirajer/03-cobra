@@ -163,8 +163,8 @@ compilePrim2 l env Minus v1 v2 = assertType env v1 TNumber
 compilePrim2 l env Times v1 v2 = assertType env v1 TNumber
 								++ assertType env v2 TNumber
 								++ [ IMov (Reg EAX) (immArg env v1)
-								, IMul (Reg EAX) (immArg env v2), IShr (Reg EAX) (Const 1)
-								, IJo (DynamicErr ArithOverflow)] 
+								, IMul (Reg EAX) (immArg env v2)
+								, IJo (DynamicErr ArithOverflow), IShr (Reg EAX) (Const 1)] 
 compilePrim2 l env Less v1 v2 = assertType env v1 TNumber
 								++ assertType env v2 TNumber
 								++ [ IMov (Reg EAX) (immArg env v1), ISub (Reg EAX) (immArg env v2)
