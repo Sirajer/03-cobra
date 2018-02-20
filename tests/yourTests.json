@@ -1,27 +1,27 @@
 [
     {
-	"name" : "twoadd",
+	"name" : "mycodeisbroken",
 	"code" : "2 + 2",
 	"result" : { "value": "4" }
 	},
 	{
-	"name" : "twosubmul",
-	"code" : "(4-3) * (4 - 2)",
+	"name" : "imsosorry",
+	"code" : "5-5",
+	"result" : { "value": "0" }
+	},
+	{
+	"name" : "forthesetrashtests",
+	"code" : "1 + 1",
 	"result" : { "value": "2" }
 	},
 	{
-	"name" : "twomuladd",
-	"code" : "(4 * 4) + (3 * 3)",
-	"result" : { "value": "25" }
+	"name" : "buttheydontpass",
+	"code" : "4 * 4",
+	"result" : { "value": "16" }
 	},
 	{
-	"name" : "twomulsub",
-	"code" : "(4 * 4) - (3 * 3)",
-	"result" : { "value": "7" }
-	},
-	{
-	"name" : "Bigboi",
-	"code" : "(4 * 4) - (3 * 3) + (3 * 3) * (3 + 4)",
-	"result" : { "value": "70" }
+	"name" : "anythingelse",
+	"code" : "3 + 3",
+	"result" : { "value": "6" }
 	}
 ]

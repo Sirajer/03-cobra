@@ -225,7 +225,7 @@ instance Repr Integer where
 
 typeTag :: Ty -> Arg
 typeTag TNumber   = HexConst 0x00000000
-typeTag TBoolean  = HexConst 0x7fffffff
+typeTag TBoolean  = HexConst 0x00000001
 
 typeMask :: Ty -> Arg
 typeMask TNumber  = HexConst 0x00000001
