@@ -1,3 +1,27 @@
 [
-    
+    {
+	"name" : "twoaddmul",
+	"code" : "(3 + 4) * (2 + 4)",
+	"result" : { "value": "42" }
+	},
+	{
+	"name" : "twosubmul",
+	"code" : "(4-3) * (4 - 2)",
+	"result" : { "value": "2" }
+	},
+	{
+	"name" : "twomuladd",
+	"code" : "(4 * 4) + (3 * 3)",
+	"result" : { "value": "25" }
+	},
+	{
+	"name" : "twomulsub",
+	"code" : "(4 * 4) - (3 * 3)",
+	"result" : { "value": "7" }
+	},
+	{
+	"name" : "Bigboi",
+	"code" : "(4 * 4) - (3 * 3) + (3 * 3) * (3 + 4)",
+	"result" : { "value": "70" }
+	}
 ]
