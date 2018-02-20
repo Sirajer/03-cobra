@@ -191,7 +191,7 @@ compileIf l env v e1 e2 = let (_, i) = l in
 						  ++ compileEnv env e1 ++ [ILabel (BranchDone i)])
 
 immArg :: Env -> IExp -> Arg
-immArg _   (Number n _)  = repr n
+immArg _   (Number n _)  = repr (n >> 1)
 immArg _   (Boolean b _) = repr b
 immArg env e@(Id x _)    = stackVar (fromMaybe err (lookupEnv x env))
   where

@@ -32,18 +32,17 @@ anf i (Id     x l)      = (i, Id     x l)
 
 anf i (Let x e b l)     = (i'', Let x e' b' l)
   where
-    (i', e')            = anf i e
-    (i'', b')           = anf i' b
+    (i', e') = anf i e
+    (i'', b') = anf i' b
 
 anf i (Prim1 o e l)     = (i', stitch bs  (Prim1 o ae l))
   where
     (i', bs, ae)        = imm i e
 
-anf i (Prim2 o e1 e2 l) = -- error "TBD:anf:prim2"
-                          (i'', stitch (b2s ++ b1s) (Prim2 o (v1) (v2) l))
+anf i (Prim2 o e1 e2 l) = (i'', stitch (b2s ++ b1s) (Prim2 o (v1) (v2) l))
   where
-    (i', b1s, v1)       = imm i e1
-    (i'', b2s, v2)      = imm i' e2
+    (i', b1s, v1) = imm i e1
+    (i'', b2s, v2) = imm i' e2
 
 anf i (If c e1 e2 l)    = (i''', stitch bs  (If c' e1' e2' l))
   where
